@@ -13,6 +13,7 @@ class App extends React.Component {
     this.state = {
       username:'',
       password:'', 
+      role: '',
       token:'',
       secret: '',
     }
@@ -24,6 +25,7 @@ class App extends React.Component {
     await superagent.post('http://localhost:3333/signin').set('Authorization', `Basic ${encoded}`).set('Access-Control-Allow-Credentials', "true").then(result => {
     Cookies.set('auth-token', result.body.token)
     this.setState({token: result.body.token})
+    this.setState({role: result.body.user.role})
   })
 }
 
@@ -39,8 +41,8 @@ signUp = async (e) => {
 hitMe = (e) =>{
   e.preventDefault();
   superagent.get('http://localhost:3333/secret').set('Authorization', `Bearer ${this.state.token}`).then(result => {
-    console.log("SECRET: ", result)
-    this.setState({secret: "you the Adminguy"})
+    console.log("SECRET: ", this.state.role)
+    if (this.state.role === 'admin'){this.setState({secret: "you the Adminguy"})}
     // Cookies.set('auth-token', result.user.token)
   })
 }
@@ -50,9 +52,9 @@ flip = () =>{
     return(
       <div>
       {
-        this.state.admin 
-      ? <h1>Welcome ADMIN!!!</h1>
-      : <h1>Welcome USER!!!</h1>
+        this.state.role === 'admin' 
+      ? <h1>Welcome {this.state.role}!!!</h1>
+      : <h1>Welcome {this.state.role}!!!</h1>
       }
       </div>      
     )
@@ -72,12 +74,12 @@ render(){
           <button type='submit' onClick={this.signUp}>Sign Up</button>
           <h1>{this.state.secret}</h1>
           <button type='submit' onClick={this.hitMe}>SECRETS</button>
-          
+            <flip/>
+    
 
-      
       </header>
       <body>
-            <flip/>
+          
       </body>
     </div>
   );
