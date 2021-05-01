@@ -14,7 +14,7 @@ class App extends React.Component {
       username:'',
       password:'', 
       token:'',
-      show: false
+      secret: '',
     }
   }
 
@@ -40,7 +40,7 @@ hitMe = (e) =>{
   e.preventDefault();
   superagent.get('http://localhost:3333/secret').set('Authorization', `Bearer ${this.state.token}`).then(result => {
     console.log("SECRET: ", result)
-    this.setState({show: true})
+    this.setState({secret: "you the Adminguy"})
     // Cookies.set('auth-token', result.user.token)
   })
 }
@@ -70,7 +70,7 @@ render(){
         </form> 
           <button type='submit' onClick={this.signIn}>Sign In</button>
           <button type='submit' onClick={this.signUp}>Sign Up</button>
-          <h1 show={this.show}>SEEEEEECREETTTTTS</h1>
+          <h1>{this.state.secret}</h1>
           <button type='submit' onClick={this.hitMe}>SECRETS</button>
           
 
