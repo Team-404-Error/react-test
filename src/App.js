@@ -1,7 +1,7 @@
 import './App.css';
 import React from 'react'
 import superagent from 'superagent';
-import Cookies from 'js-cookie';
+// import Cookies from 'js-cookie';
 const base64 = require('base-64');
 require('dotenv').config();
 
@@ -12,7 +12,7 @@ class App extends React.Component {
     this.state = {
       username:'',
       password:'', 
-      token:'',
+      token:'0',
     }
   }
 
@@ -20,7 +20,7 @@ class App extends React.Component {
   e.preventDefault();
     let encoded = base64.encode(`${this.state.username}:${this.state.password}`)
     superagent.post('http://localhost:3333/signin').set('Authorization', `Basic ${encoded}`).then(result => {
-      console.log("sign in: ", result.user)
+      console.log("sign in: ", result)
     // Cookies.set('auth-token', result.user.token)
     console.log('yay')
   })
